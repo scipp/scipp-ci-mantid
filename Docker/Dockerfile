@@ -15,8 +15,6 @@ RUN apt-get update
 RUN apt-get install -y libgl1 libglu1-mesa && \
     apt-get clean
 
-RUN mkdir -p /opt/scripts
-
 # updating scipp and run tests
 CMD conda install --yes \
     -c scipp/label/dev scipp && \
