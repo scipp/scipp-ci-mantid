@@ -1,5 +1,15 @@
 #The oficial image from Anaconda
 FROM conda/miniconda3
+
+# set up proxies for using conda
+ENV http_proxy ${http_proxy}
+ENV https_proxy ${https_proxy}
+RUN echo "http_proxy=$http_proxy" > /etc/environment && \
+    echo "https_proxy=$https_proxy" > /etc/environment
+
+RUN conda config --set proxy_servers.http "$http_proxy" && \
+    conda config --set proxy_servers.https "$https_proxy"
+
 # The default version of conda is broken
 RUN conda update -n base -c defaults conda
 # Install mantid
