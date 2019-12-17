@@ -20,7 +20,7 @@ if __name__ == "__main__":
     if args.http_proxy:
         command = "{} --build-arg http_proxy".format(command)
     if args.https_proxy:
-        command = "{} --build-arg https_proxy".format(command, args.https_proxy)
+        command = "{} --build-arg https_proxy".format(command)
     print("command = ", command)
     command = "{} {}".format(command, docker_path)
     sp.run(command, check=True, shell=True)
