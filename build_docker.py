@@ -11,7 +11,7 @@ if __name__ == "__main__":
     parser.add_argument("--http_proxy", action="store_true",
                         help="use this address as http proxy.")
     parser.add_argument("--https_proxy", action="store_true",
-                        help="use this address as http proxy.")
+                        help="use this address as https proxy.")
 
     args = parser.parse_args()
     docker_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
