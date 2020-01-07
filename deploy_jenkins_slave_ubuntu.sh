@@ -21,3 +21,7 @@ useradd -m -s /bin/bash jenkins
 usermod -aG docker jenkins
 apt-get install -y openjdk-8-jdk
 # DO  NOT FORGET TO SET THE PASSWORD FOR USER "jenkins" 
+mkdir -p /opt/ci
+cd /opt/ci
+git clone https://github.com/scipp/scipp-ci-mantid.git
+chmod -R a+rw /opt/ci
