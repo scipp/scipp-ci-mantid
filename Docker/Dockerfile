@@ -54,8 +54,6 @@ RUN apt-get install -y libgl1 libglu1-mesa && \
 
 # updating scipp and run tests
 CMD source activate $(cat /opt/scipp_env) && \
-    cat /etc/default/locale && \
-    locale && \
     bash /opt/scripts/check_python_version.sh && \
     conda install --yes \
     -c scipp/label/dev \
