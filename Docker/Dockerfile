@@ -12,6 +12,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+# Install latest miniconda
 RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /opt/miniconda.sh && \
     bash /opt/miniconda.sh -b -p /opt/miniconda && \
     rm /opt/miniconda.sh
@@ -27,6 +28,7 @@ RUN echo "http_proxy=$http_proxy" > /etc/environment && \
 RUN conda config --set proxy_servers.http "$http_proxy" && \
     conda config --set proxy_servers.https "$https_proxy"
 
+# bring needed scripts
 COPY scripts /opt/scripts
 RUN chmod -R a+rwx /opt/scripts
 
