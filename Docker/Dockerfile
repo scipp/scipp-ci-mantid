@@ -1,4 +1,4 @@
-#The oficial image from Anaconda
+# Fresh ubuntu
 FROM ubuntu
 
 SHELL ["/bin/bash", "-c"]
