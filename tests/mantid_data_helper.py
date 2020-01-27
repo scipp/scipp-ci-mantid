@@ -3,7 +3,7 @@
 # @author Dimitar Tasev
 
 import os
-import sys
+import hashlib
 from urllib import request
 
 
@@ -39,9 +39,16 @@ class MantidDataHelper:
             os.makedirs(dir_name, exist_ok=True)
 
         if not os.path.isfile(data_location):
-            query = cls.REMOTE_URL.format(algorithm=data_file["algorithm"],
-                                          hash=data_file["hash"])
+            file_hash = data_file["hash"]
+            algorithm = data_file["algorithm"]
+            query = cls.REMOTE_URL.format(algorithm=algorithm,
+                                          hash=file_hash)
             data_location, http_response = request.urlretrieve(query,
                                                                data_location)
+            if algorithm == "MD5":
+                with open(data_location, "rb") as file:
+                    md5 = hashlib.md5(file.read()).hexdigest()
+                    if md5 != file_hash:
+                        raise RuntimeError("Check sum doesn't match.")
 
         return data_location
