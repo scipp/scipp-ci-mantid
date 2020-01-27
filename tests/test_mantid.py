@@ -18,6 +18,13 @@ def mantid_is_available():
         return False
 
 
+def check_monitors(dataset, shape):
+    for name, val in dataset.attrs:
+        if "monitor" in name:
+            assert isinstance(val.value, sc.DataArray)
+            assert val.value.shape == [shape]
+
+
 @pytest.mark.skipif(not mantid_is_available(),
                     reason='Mantid framework is unavailable')
 class TestMantidConversion(unittest.TestCase):
@@ -151,24 +158,18 @@ class TestMantidConversion(unittest.TestCase):
         filename = MantidDataHelper.find_file("WISH00016748.raw")
         ds = sc.neutron.load(filename,
                                mantid_args={"LoadMonitors": "Separate"})
-        monitors = ds.attrs['monitors'].values
-        assert isinstance(monitors, sc.DataArray)
-        assert monitors.shape == [5, 4471]
+        check_monitors(ds, 4471)
 
     def test_Workspace2D_with_include_monitors(self):
         filename = MantidDataHelper.find_file("WISH00016748.raw")
         ds = sc.neutron.load(filename,
                                mantid_args={"LoadMonitors": "Include"})
-        monitors = ds.attrs['monitors'].values
-        assert isinstance(monitors, sc.DataArray)
-        assert monitors.shape == [5, 4471]
+        check_monitors(ds, 4471)
 
     def test_EventWorkspace_with_monitors(self):
         filename = MantidDataHelper.find_file("CNCS_51936_event.nxs")
         ds = sc.neutron.load(filename, mantid_args={"LoadMonitors": True})
-        monitors = ds.attrs['monitors'].values
-        assert isinstance(monitors, sc.DataArray)
-        assert monitors.shape == [2, 200001]
+        check_monitors(ds, 200001)
 
     def test_Workspace2D_with_specific_axis_units(self):
         filename = MantidDataHelper.find_file("iris26176_graphite002_sqw.nxs")
