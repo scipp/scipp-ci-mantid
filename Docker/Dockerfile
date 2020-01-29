@@ -3,7 +3,8 @@ FROM ubuntu
 
 SHELL ["/bin/bash", "-c"]
 
-RUN apt-get update && apt-get install --yes wget locales
+# libgl1 libglu1-mesa needed for mantid for some reason
+RUN apt-get update && apt-get install --yes wget libgl1 libglu1-mesa locales
 
 # Set locale to be sure CSS can work with all needed symbols
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -34,6 +35,14 @@ RUN chmod -R a+rwx /opt/scripts
 
 RUN echo scipp_env > /opt/scipp_env
 
+# Creating user with passed args to be consistent with
+# host for sharing folder credentials.
+ARG username
+ARG userid
+
+RUN useradd -u $userid -m -s /bin/bash $username && chown -R $username:$username  /opt
+USER $username
+
 # Create the environment with mantid and python version
 # valid for latest scipp
 RUN conda remove --yes -n $(cat /opt/scipp_env) --all && \
@@ -48,12 +57,6 @@ RUN conda remove --yes -n $(cat /opt/scipp_env) --all && \
     pytest \
     matplotlib ipywidgets   # should be resolved on dependencies of scipp
 
-
-# needed for mantid for some reason
-RUN apt-get update
-RUN apt-get install -y libgl1 libglu1-mesa && \
-    apt-get clean
-
 # updating scipp and run tests
 CMD source activate $(cat /opt/scipp_env) && \
     bash /opt/scripts/check_python_version.sh && \
@@ -61,6 +64,6 @@ CMD source activate $(cat /opt/scipp_env) && \
     -c scipp/label/dev \
     scipp=$(bash /opt/scripts/scipp_latest_version.sh) && \
     echo $(bash /opt/scripts/scipp_latest_version.sh) && \
-    pytest /opt/tests
+    pytest --verbose /opt/tests
 
 

@@ -12,6 +12,6 @@ if __name__ == "__main__":
     test_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                "tests")
     args = parser.parse_args()
-    command = "docker run -v {}:/opt/tests {}".format(
+    command = "docker run -u jenkins -v {}:/opt/tests {}".format(
         test_folder, args.image_name)
     sys.exit(sp.run(command, shell=True).returncode)
