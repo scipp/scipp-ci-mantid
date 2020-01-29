@@ -24,4 +24,5 @@ apt-get install -y openjdk-8-jdk
 mkdir -p /opt/ci
 cd /opt/ci
 git clone https://github.com/scipp/scipp-ci-mantid.git
+chown -R jenkins:jenkins /opt/ci
 chmod -R a+rw /opt/ci
