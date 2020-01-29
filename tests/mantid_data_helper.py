@@ -1,11 +1,17 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2019 Scipp contributors (https://github.com/scipp)
 # @author Dimitar Tasev
-
 import os
 import hashlib
-from urllib import request
+import sys
+import subprocess as sp
 
+
+def download_file(source, destination):
+    command = "wget -O {} {}".format(destination, source)
+    status = sp.run(command, shell=True).returncode
+    if status != 0:
+        raise RuntimeError("Can't load {} to {}.".format(source, destination))
 
 class MantidDataHelper:
     # Valid only for Linux. Windows is as C:\MantidExternalData
@@ -43,8 +49,7 @@ class MantidDataHelper:
             algorithm = data_file["algorithm"]
             query = cls.REMOTE_URL.format(algorithm=algorithm,
                                           hash=file_hash)
-            data_location, http_response = request.urlretrieve(query,
-                                                               data_location)
+            download_file(query, data_location)
             if algorithm == "MD5":
                 with open(data_location, "rb") as file:
                     md5 = hashlib.md5(file.read()).hexdigest()
@@ -52,3 +57,4 @@ class MantidDataHelper:
                         raise RuntimeError("Check sum doesn't match.")
 
         return data_location
+

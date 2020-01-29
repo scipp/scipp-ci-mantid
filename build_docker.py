@@ -1,6 +1,7 @@
 import argparse
 import subprocess as sp
 import os
+import pwd
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Buids docker image for "
@@ -24,7 +25,9 @@ if __name__ == "__main__":
             command = "docker rmi -f {}".format(args.image_name)
             sp.run(command, check=True, shell=True)
 
-    command = "docker build -t {}".format(args.image_name)
+    uid = os.getuid()
+    uname = pwd.getpwuid(uid)[0]
+    command = "docker build -t {} --build-arg username={} --build-arg userid={}".format(args.image_name, uname, uid)
     if args.http_proxy:
         command = "{} --build-arg http_proxy".format(command)
     if args.https_proxy:
