@@ -154,17 +154,19 @@ class TestMantidConversion(unittest.TestCase):
             ds.masks["spectrum"].values[0:3],
             [True, True, True])
 
-#    def test_Workspace2D_with_separate_monitors(self):
-#        filename = MantidDataHelper.find_file("WISH00016748.raw")
-#        ds = sc.neutron.load(filename,
-#                               mantid_args={"LoadMonitors": "Separate"})
-#        check_monitors(ds, 4471)
+    @pytest.mark.skip(reason="Not enough memory on the vm")
+    def test_Workspace2D_with_separate_monitors(self):
+       filename = MantidDataHelper.find_file("WISH00016748.raw")
+       ds = sc.neutron.load(filename,
+                              mantid_args={"LoadMonitors": "Separate"})
+       check_monitors(ds, 4471)
 
-#    def test_Workspace2D_with_include_monitors(self):
-#        filename = MantidDataHelper.find_file("WISH00016748.raw")
-#        ds = sc.neutron.load(filename,
-#                               mantid_args={"LoadMonitors": "Include"})
-#        check_monitors(ds, 4471)
+    @pytest.mark.skip(reason="Not enough memory on the vm")
+    def test_Workspace2D_with_include_monitors(self):
+       filename = MantidDataHelper.find_file("WISH00016748.raw")
+       ds = sc.neutron.load(filename,
+                              mantid_args={"LoadMonitors": "Include"})
+       check_monitors(ds, 4471)
 
     def test_EventWorkspace_with_monitors(self):
         filename = MantidDataHelper.find_file("CNCS_51936_event.nxs")
