@@ -8,6 +8,20 @@ set up another type of access for Jenkins master to slave.
 
 #### Shell commands to execute on the slave machine
 
+To use ubuntu as Jenkins slave:
+
+```
+sudo apt-get update
+sudo apt-get install -y curl apt-transport-https ca-certificates gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg |sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+su
+deploy_jenkins_slave_ubuntu.sh
+passwd jenkins
+exit
+```
+
 To update the docker image from this repo:
 
 ```bash
